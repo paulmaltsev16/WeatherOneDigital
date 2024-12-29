@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_one_digital/core/models/weather_model.dart';
+import 'package:weather_one_digital/domain/weather/remove_weather_by_contry_use_case.dart';
 import 'package:weather_one_digital/presentation/weather_details/widgets/weather_information_item.dart';
 
 class WeatherDetailsScreen extends StatelessWidget {
@@ -49,6 +50,14 @@ class WeatherDetailsScreen extends StatelessWidget {
             ),
             WeatherInformationItem(
               "Data Calculated at: ${DateTime.fromMillisecondsSinceEpoch((weatherModel.dt ?? 0) * 1000)}",
+            ),
+            SizedBox(height: 24),
+            OutlinedButton(
+              onPressed: () {
+                RemoveWeatherByCountyUseCase().call(weatherModel.name ?? "");
+                Navigator.of(context).pop();
+              },
+              child: Text("Remove current weather information"),
             )
           ],
         ),
