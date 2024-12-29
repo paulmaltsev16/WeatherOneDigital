@@ -21,5 +21,6 @@ class GetWeatherRequest implements HttpRequest {
   Map<String, dynamic> get params => {
         'q': countryName,
         "appid": SensitiveData.weatherApiKey,
+        "units": "metric",
       };
 }
