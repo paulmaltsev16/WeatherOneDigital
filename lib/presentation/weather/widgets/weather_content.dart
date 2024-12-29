@@ -14,15 +14,6 @@ class WeatherContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        WeatherInputField(
-          onSearch: ref
-              .read(weatherViewModelProvider.notifier)
-              .searchWeatherByUserInput,
-          onSave: ref
-              .read(weatherViewModelProvider.notifier)
-              .saveCountryNameClicked,
-        ),
-        SizedBox(height: 16),
         Expanded(
           child: WeatherList(weather: weather),
         ),
