@@ -8,6 +8,6 @@ class RemoveWeatherByCountyUseCase {
   final WeatherRepository repository;
 
   Future<void> call(String countryName) async {
-    return await repository.removeWeatherByCounty(countryName);
+    return await repository.removeWeatherByCountry(countryName);
   }
 }

@@ -16,6 +16,7 @@ class WeatherViewModel extends _$WeatherViewModel {
   @override
   FutureOr<AsyncValue> build() async {
     final weather = await _getWeather();
+    weatherByCountry.clear();
     weatherByCountry.addAll(weather);
     return AsyncData(weatherByCountry);
   }

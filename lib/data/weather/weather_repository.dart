@@ -6,5 +6,5 @@ abstract class WeatherRepository {
 
   Future<List<WeatherModel>> getWeather();
 
-  Future<void> removeWeatherByCounty(String countryName);
+  Future<void> removeWeatherByCountry(String countryName);
 }

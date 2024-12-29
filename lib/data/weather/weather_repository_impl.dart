@@ -26,13 +26,22 @@ class WeatherRepositoryImpl implements WeatherRepository {
   }
 
   Future<void> _saveWeatherToLocalStorage(WeatherModel weather) async {
-    // Recommended to use SQL or Hive for storing large amounts of data.
-    // For simplicity, use SharedPreferences.
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final listOfStrings = prefs.getStringList(_weatherLocalStorage);
-    listOfStrings?.add(jsonEncode(weather.toJson()));
-    await prefs.setStringList(_weatherLocalStorage, listOfStrings ?? []);
-    debugPrint("${weather.name} saved locally.");
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final listOfStrings = prefs.getStringList(_weatherLocalStorage) ?? [];
+      listOfStrings.add(jsonEncode(weather.toJson()));
+
+      bool isSaved =
+          await prefs.setStringList(_weatherLocalStorage, listOfStrings);
+
+      if (isSaved) {
+        debugPrint("${weather.name} saved locally.");
+      } else {
+        debugPrint("Failed to save ${weather.name} locally.");
+      }
+    } catch (e) {
+      debugPrint("Error saving weather data: $e");
+    }
   }
 
   @override
@@ -41,28 +50,40 @@ class WeatherRepositoryImpl implements WeatherRepository {
   }
 
   @override
-  Future<void> removeWeatherByCounty(String countryName) async {
-    final weatherList = await _getWeatherFromLocalStorage();
-    weatherList.removeWhere((element) => element.name == countryName);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove(_weatherLocalStorage);
-    for (var weather in weatherList) {
-      _saveWeatherToLocalStorage(weather);
-    }
+  Future<void> removeWeatherByCountry(String countryName) async {
+    try {
+      final weatherList = await _getWeatherFromLocalStorage();
 
-    debugPrint("${countryName} removed locally.");
+      final updatedWeatherList =
+          weatherList.where((weather) => weather.name != countryName).toList();
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      final updatedListOfStrings = updatedWeatherList
+          .map((weather) => jsonEncode(weather.toJson()))
+          .toList();
+
+      await prefs.setStringList(_weatherLocalStorage, updatedListOfStrings);
+      debugPrint("$countryName removed locally.");
+    } catch (e) {
+      debugPrint("Error removing weather data for $countryName: $e");
+    }
   }
 
   Future<List<WeatherModel>> _getWeatherFromLocalStorage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final listOfStrings = prefs.getStringList(_weatherLocalStorage);
-    final List<WeatherModel> weatherList = [];
-    for (var item in listOfStrings ?? []) {
-      final json = jsonDecode(item);
-      final model = WeatherModel.fromJson(json);
-      weatherList.add(model);
-    }
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final listOfStrings = prefs.getStringList(_weatherLocalStorage);
+      final List<WeatherModel> weatherList = listOfStrings?.map((item) {
+            final json = jsonDecode(item);
+            return WeatherModel.fromJson(json);
+          }).toList() ??
+          [];
 
-    return weatherList;
+      return weatherList;
+    } catch (e) {
+      debugPrint("Error retrieving weather data: $e");
+      return [];
+    }
   }
 }
