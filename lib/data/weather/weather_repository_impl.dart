@@ -46,4 +46,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
 
     return weatherList;
   }
+
+  @override
+  Future<void> removeWeatherByCounty(String countryName) async {}
 }

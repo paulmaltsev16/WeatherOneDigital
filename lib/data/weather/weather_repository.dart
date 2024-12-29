@@ -5,4 +5,6 @@ abstract class WeatherRepository {
   Future<Result> searchWeatherByCountryName(String countryName);
 
   Future<List<WeatherModel>> getWeather();
+
+  Future<void> removeWeatherByCounty(String countryName);
 }
