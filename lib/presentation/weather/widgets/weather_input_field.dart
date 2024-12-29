@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 class WeatherInputField extends StatefulWidget {
   const WeatherInputField({
     required this.onSearch,
-    required this.onSave,
     super.key,
   });
 
   final Function onSearch;
-  final Function onSave;
 
   @override
   _WeatherInputFieldState createState() => _WeatherInputFieldState();
@@ -20,11 +18,6 @@ class _WeatherInputFieldState extends State<WeatherInputField> {
   void _onSearch() {
     String inputText = _textController.text;
     widget.onSearch(inputText);
-  }
-
-  void _onSave() {
-    String inputText = _textController.text;
-    widget.onSave(inputText);
   }
 
   @override
@@ -47,10 +40,6 @@ class _WeatherInputFieldState extends State<WeatherInputField> {
             ElevatedButton(
               onPressed: _onSearch,
               child: Text("Search"),
-            ),
-            ElevatedButton(
-              onPressed: _onSave,
-              child: Text("Save"),
             ),
           ],
         ),
