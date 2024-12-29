@@ -6,8 +6,8 @@ import 'package:async/async.dart';
 
 class WeatherRepositoryImpl implements WeatherRepository {
   @override
-  Future<Result> getWeather() async {
-    final request = GetWeatherRequest(countryName: "Israel");
+  Future<Result> getWeather(String countryName) async {
+    final request = GetWeatherRequest(countryName: countryName);
     final result = await NetworkManager().makeRequest(request);
 
     if (result.isValue) {
