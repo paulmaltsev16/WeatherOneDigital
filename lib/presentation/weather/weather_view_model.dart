@@ -22,4 +22,12 @@ class WeatherViewModel extends _$WeatherViewModel {
           StackTrace.current);
     }
   }
+
+  void searchWeatherByUserInput(String input) {
+    print("search clicked $input");
+  }
+
+  void saveCountryNameClicked(String input) {
+    print("save clicked $input");
+  }
 }
