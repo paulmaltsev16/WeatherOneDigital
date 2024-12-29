@@ -48,4 +48,9 @@ class WeatherViewModel extends _$WeatherViewModel {
   void _onErrorOccurredHandler(Object error) {
     state = AsyncError(error, StackTrace.current);
   }
+
+  void removeWeatherFromList(String countryName) {
+    weatherByCountry.removeWhere((element) => element.name == countryName);
+    state = AsyncData(AsyncValue.data(weatherByCountry));
+  }
 }

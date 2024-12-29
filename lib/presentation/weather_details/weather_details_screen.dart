@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather_one_digital/core/models/weather_model.dart';
 import 'package:weather_one_digital/domain/weather/remove_weather_by_contry_use_case.dart';
+import 'package:weather_one_digital/presentation/weather/weather_view_model.dart';
 import 'package:weather_one_digital/presentation/weather_details/widgets/weather_information_item.dart';
 
-class WeatherDetailsScreen extends StatelessWidget {
+class WeatherDetailsScreen extends ConsumerWidget {
   const WeatherDetailsScreen({required this.weatherModel, super.key});
 
   final WeatherModel weatherModel;
@@ -11,7 +13,7 @@ class WeatherDetailsScreen extends StatelessWidget {
   static String route = "/weather-details";
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text(weatherModel.name ?? "Weather Info"),
@@ -55,6 +57,9 @@ class WeatherDetailsScreen extends StatelessWidget {
             OutlinedButton(
               onPressed: () {
                 RemoveWeatherByCountyUseCase().call(weatherModel.name ?? "");
+                ref
+                    .read(weatherViewModelProvider.notifier)
+                    .removeWeatherFromList(weatherModel.name ?? "");
                 Navigator.of(context).pop();
               },
               child: Text("Remove current weather information"),
