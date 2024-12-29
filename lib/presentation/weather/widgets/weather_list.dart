@@ -9,12 +9,15 @@ class WeatherList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: weather.length,
-      itemBuilder: (context, index) {
-        final weatherModel = weather[index];
-        return WeatherItem(weatherModel: weatherModel);
-      },
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView.builder(
+        itemCount: weather.length,
+        itemBuilder: (context, index) {
+          final weatherModel = weather[index];
+          return WeatherItem(weatherModel: weatherModel);
+        },
+      ),
     );
   }
 }
