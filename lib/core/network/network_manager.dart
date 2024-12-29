@@ -19,7 +19,7 @@ class NetworkManager {
 
     if (response.statusCode != 200) {
       debugPrint("NetworkManager response code is not 200. ${response.body}");
-      return Result.error("Something went wrong");
+      return Result.error("Something went wrong, please try another name");
     }
 
     try {

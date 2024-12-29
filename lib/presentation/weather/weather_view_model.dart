@@ -2,29 +2,46 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:weather_one_digital/core/models/weather_model.dart';
 import 'package:weather_one_digital/domain/weather/get_weather_by_country_use_case.dart';
+import 'package:async/async.dart';
 
 part "weather_view_model.g.dart";
 
 @riverpod
 class WeatherViewModel extends _$WeatherViewModel {
   final _getWeatherByCountry = GetWeatherByCountryUseCase();
+  final List<WeatherModel> weatherByCountry = [];
 
   @override
   FutureOr<AsyncValue> build() async {
-    final result = await _getWeatherByCountry("Israel");
+    return AsyncData(weatherByCountry);
+  }
 
-    if (result.isValue) {
-      final model = result.asValue?.value;
-      return AsyncData<List<WeatherModel>>([model]);
-    } else {
-      return AsyncError(
-          result.asError?.error ?? "Can't proceed with this request",
-          StackTrace.current);
+  Future<void> searchWeatherByUserInput(String input) async {
+    state = AsyncLoading();
+
+    final Result result = await _getWeatherByCountry(input);
+
+    switch (result) {
+      case ValueResult(value: final weather):
+        _weatherResponseHandler(weather);
+        break;
+
+      case ErrorResult(error: final error):
+        _onErrorOccurredHandler(error);
+        break;
+
+      default:
+        print('Unexpected case');
     }
   }
 
-  void searchWeatherByUserInput(String input) {
-    print("search clicked $input");
+  void _weatherResponseHandler(WeatherModel weather) {
+    weatherByCountry.add(weather);
+    state = AsyncData(AsyncValue.data(weatherByCountry));
+  }
+
+  void _onErrorOccurredHandler(Object error) {
+    state = AsyncError(error, StackTrace.current);
   }
 
   void saveCountryNameClicked(String input) {
