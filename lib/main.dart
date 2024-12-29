@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather_one_digital/presentation/weather/weather_screen.dart';
-import 'package:weather_one_digital/presentation/weather_details/weather_details_screen.dart';
 
 void main() {
   runApp(
@@ -22,11 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: WeatherScreen.route,
-      routes: {
-        WeatherScreen.route: (context) => const WeatherScreen(),
-        WeatherDetailsScreen.route: (context) => const WeatherDetailsScreen(),
-      },
+      home: const WeatherScreen(),
     );
   }
 }
