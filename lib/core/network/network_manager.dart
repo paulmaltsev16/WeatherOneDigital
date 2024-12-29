@@ -7,17 +7,18 @@ import 'http_request.dart';
 
 class NetworkManager {
   Future<Result> makeRequest(HttpRequest request) async {
-    final url = Uri.parse(request.fullUrl);
+    final url = request.params.isNotEmpty
+        ? Uri.parse(request.fullUrl).replace(queryParameters: request.params)
+        : Uri.parse(request.fullUrl);
 
     final http.Response? response;
-
     switch (request.httpMethod) {
       case HttpMethod.get:
         response = await http.get(url, headers: request.headers);
     }
 
     if (response.statusCode != 200) {
-      debugPrint("NetworkManager response code is not 200");
+      debugPrint("NetworkManager response code is not 200. ${response.body}");
       return Result.error("Something went wrong");
     }
 
