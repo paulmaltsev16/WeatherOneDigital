@@ -6,7 +6,7 @@ import 'package:async/async.dart';
 
 class WeatherRepositoryImpl implements WeatherRepository {
   @override
-  Future<Result> getWeather(String countryName) async {
+  Future<Result> searchWeatherByCountryName(String countryName) async {
     final request = GetWeatherRequest(countryName: countryName);
     final result = await NetworkManager().makeRequest(request);
 
@@ -16,5 +16,10 @@ class WeatherRepositoryImpl implements WeatherRepository {
     } else {
       return result;
     }
+  }
+
+  @override
+  Future<List<WeatherModel>> getWeather() async {
+    return [];
   }
 }
